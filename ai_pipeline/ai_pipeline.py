@@ -4,6 +4,7 @@
 # ============================================
 
 import pandas as pd
+from openai import OpenAI
 
 # ============================================
 # STEP 1 — Load Sample KPI Data
@@ -72,46 +73,75 @@ if wip_buildup > 10:
     )
 
 # ============================================
-# STEP 4 — Generate AI-style Insight
+# STEP 4 — Dynamic Prompt Engineering
 # ============================================
 
-summary = f"""
-AI Operational Insight Summary
+prompt = f"""
+You are a senior supply chain analyst.
 
-Warehouse utilization is currently at {warehouse_util}%,
-indicating elevated warehouse capacity risk.
+Analyze the following warehouse operational KPIs.
 
-Inventory aging has reached {aging_inventory}%,
-while outbound shipment delay is {shipment_delay}%.
+KPI Summary:
+- Warehouse Utilization: {warehouse_util}%
+- Aging Inventory: {aging_inventory}%
+- Outbound Shipment Delay: {shipment_delay}%
+- WIP Inventory Days: {wip_buildup}
 
-These operational signals suggest increasing
-warehouse overflow risk that could potentially
-impact production continuity.
-
-Key operational concerns:
+Operational Alerts:
 {alerts}
 
-Recommended actions:
-- Review inbound delivery scheduling
-- Reduce slow-moving inventory
-- Improve outbound shipment coordination
-- Monitor WIP production pacing
+Please provide:
+
+1. Executive Summary
+2. Root Cause Analysis
+3. Operational Risks
+4. Recommended Actions
+
+Keep the response concise and professional.
 """
 
-# ============================================
-# STEP 5 — Output Result
-# ============================================
-
-print(summary)
+print("Prompt generated successfully")
 
 # ============================================
-# STEP 6 — Save Report
+# STEP 5 — OpenAI API Call
+# ============================================
+
+client = OpenAI(
+    api_key="YOUR_OPENAI_API_KEY"
+)
+
+response = client.chat.completions.create(
+    model="gpt-4.1",
+    messages=[
+        {
+            "role": "user",
+            "content": prompt
+        }
+    ],
+    temperature=0.3
+)
+
+ai_insight = response.choices[0].message.content
+
+# ============================================
+# STEP 6 — Output AI Insight
+# ============================================
+
+print("\n")
+print("===================================")
+print(" AI OPERATIONAL INSIGHT REPORT ")
+print("===================================")
+
+print(ai_insight)
+
+# ============================================
+# STEP 7 — Save AI Report
 # ============================================
 
 with open(
     "ai_operational_insight.txt",
     "w"
 ) as f:
-    f.write(summary)
+    f.write(ai_insight)
 
-print("AI operational insight report saved.")
+print("\nAI operational insight report saved.")
