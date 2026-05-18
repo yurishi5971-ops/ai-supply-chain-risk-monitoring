@@ -37,17 +37,7 @@ To improve operational visibility, a conceptual AI-assisted analytics workflow w
 
 ## Workflow Architecture
 
-```text
-SAP / WMS Operational Data
-            ↓
-Python KPI Automation
-            ↓
-KPI Calculation & Risk Detection
-            ↓
-GPT-Powered Operational Insights
-            ↓
-Executive Dashboard Reporting
-```
+![Architecture Diagram](workflow/architecture_diagram.png)
 
 ---
 
